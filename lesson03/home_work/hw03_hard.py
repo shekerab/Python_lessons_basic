@@ -30,6 +30,8 @@ calc_fractions('1/6 + 1/3')
 calc_fractions('-2/3 - -2')
 calc_fractions('-1 1/6 - -2/3')
 calc_fractions('-1 1/6 + 3 2/12')
+result = Fraction('1/2') + Fraction('1/4') + Fraction('1/8') + Fraction('1/16')
+print(f'1/2 + 1/4 + 1/8 + 1/16 = {result}\n')
 
 # Задание-2:
 # Дана ведомость расчета заработной платы (файл "data/workers").
