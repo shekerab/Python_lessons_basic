@@ -8,6 +8,29 @@
 # Вывод: 1 17/42  (результат обязательно упростить и выделить целую часть)
 # Ввод: -2/3 - -2
 # Вывод: 1 1/3
+from fraction import Fraction
+
+
+def calc_fractions(str_):
+    print(f'Вычисляем {str_}')
+    if str_.find(' + ') > 0:
+        arguments = str_.split(' + ')
+        result = Fraction(arguments[0]) + Fraction(arguments[1])
+        print(f'Результат: {result}\n')
+    elif str_.find(' - ') > 0:
+        arguments = str_.split(' - ')
+        result = Fraction(arguments[0]) - Fraction(arguments[1])
+        print(f'Результат: {result}\n')
+    else:
+        print('Не удалось определить операцию\n')
+
+
+calc_fractions('5/6 + 4/7')
+calc_fractions('1/6 + 1/3')
+calc_fractions('-2/3 - -2')
+calc_fractions('-1 1/6 + 2/3')
+
+
 
 
 # Задание-2:
