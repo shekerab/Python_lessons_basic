@@ -4,6 +4,7 @@
 # Округление должно происходить по математическим правилам (0.6 --> 1, 0.4 --> 0).
 # Для решения задачи не используйте встроенные функции и функции из модуля math.
 
+
 def my_round(number, ndigits):
     powered = number*(10**ndigits)
     powered_int = int(powered)
@@ -34,6 +35,7 @@ def lucky_ticket(ticket_number):
         digits.append(n % 10)
         n = n // 10
     return sum(digits[:3]) == sum(digits[3:])
+
 
 print(lucky_ticket(123006))
 print(lucky_ticket(12321))

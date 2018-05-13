@@ -45,7 +45,7 @@ with open('data/workers', encoding='utf-8') as f:
 workers = {}
 for l in lines:
     ls = l.split()
-    workers.update({f'{ls[0]} {ls[1]}':{'salary':int(ls[2]), 'norm':int(ls[4]), 'hours':None}})
+    workers.update({f'{ls[0]} {ls[1]}': {'salary': int(ls[2]), 'norm': int(ls[4]), 'hours': None}})
 
 with open('data/hours_of', encoding='utf-8') as f:
     lines = f.readlines()[1:]
@@ -77,3 +77,18 @@ for name, sums in workers.items():
 # Подсказка:
 # Чтобы получить список больших букв русского алфавита:
 # print(list(map(chr, range(ord('А'), ord('Я')+1))))
+
+rng = range(ord('А'), ord('Я')+1)
+letters = dict(zip(list(map(chr, rng)), [[] for _ in rng]))
+with open("data/fruits.txt", encoding='utf-8') as f:
+    lines = f.readlines()
+for l in lines:
+    v = l.strip()
+    if v == '':
+        continue
+    first_letter = v[0].upper()
+    letters[first_letter].append(v)
+
+for letter, content in letters.items():
+    with open(f"data/fruits_{letter}.txt", 'w', encoding='utf-8') as f:
+        f.writelines(map(lambda x: x+'\n', content))
