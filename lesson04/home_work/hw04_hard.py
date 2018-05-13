@@ -1,3 +1,6 @@
+import re
+from functools import reduce
+
 # Задание-1:
 # Матрицы в питоне реализуются в виде вложенных списков:
 # Пример. Дано:
@@ -6,7 +9,7 @@ matrix = [[1, 0, 8],
           [0, 4, 2]]
 
 res = list(map(lambda x: list(x), zip(*matrix)))
-print(res)
+print(f'Транспонированная матрица {res}\n')
           
 # Выполнить поворот (транспонирование) матрицы
 # Пример. Результат:
@@ -41,6 +44,16 @@ number = """
 84580156166097919133875499200524063689912560717606
 05886116467109405077541002256983155200055935729725
 71636269561882670428252483600823257530420752963450"""
+
+
+list_number = list(map(lambda x: int(x), re.findall('[0-9]',number)))
+prods = []
+for i in range(len(list_number)-5):
+    prods.append(reduce(lambda x, y: x * y, list_number[i:i+5]))
+max_prod = max(prods)
+print(f'Максимальное произведение: {max_prod}')
+print(f'Сдвиг {prods.index(max_prod)}\n')
+
 
 
 # Задание-3 (Ферзи):
