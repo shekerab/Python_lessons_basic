@@ -31,8 +31,6 @@ calc_fractions('-2/3 - -2')
 calc_fractions('-1 1/6 + 2/3')
 
 
-
-
 # Задание-2:
 # Дана ведомость расчета заработной платы (файл "data/workers").
 # Рассчитайте зарплату всех работников, зная что они получат полный оклад,
@@ -40,6 +38,31 @@ calc_fractions('-1 1/6 + 2/3')
 # то их ЗП уменьшается пропорционально, а за заждый час переработки
 # они получают удвоенную ЗП, пропорциональную норме.
 # Кол-во часов, которые были отработаны, указаны в файле "data/hours_of"
+
+
+with open('data/workers', encoding='utf-8') as f:
+    lines = f.readlines()[1:]
+workers = {}
+for l in lines:
+    ls = l.split()
+    workers.update({f'{ls[0]} {ls[1]}':{'salary':int(ls[2]), 'norm':int(ls[4]), 'hours':None}})
+
+with open('data/hours_of', encoding='utf-8') as f:
+    lines = f.readlines()[1:]
+for l in lines:
+    ls = l.split()
+    workers[f'{ls[0]} {ls[1]}']['hours'] = int(ls[2])
+
+for name, sums in workers.items():
+    if not sums['hours']:
+        print(f'{name} не работал')
+    else:
+        if sums['norm'] < sums['hours']:
+            salary = sums['salary'] * (1 + (2 / sums['norm']) * (sums['hours'] - sums['norm']))
+        else:
+            salary = sums['salary'] * (sums['hours'] / sums['norm'])
+        salary = round(salary, 2)
+        print(f'{name} заработал {salary}')
 
 
 # Задание-3:
