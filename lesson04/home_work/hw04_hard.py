@@ -4,6 +4,9 @@
 matrix = [[1, 0, 8],
           [3, 4, 1],
           [0, 4, 2]]
+
+res = list(map(lambda x: list(x), zip(*matrix)))
+print(res)
           
 # Выполнить поворот (транспонирование) матрицы
 # Пример. Результат:
@@ -47,3 +50,23 @@ number = """
 # Программа получает на вход восемь пар чисел,
 # каждое число от 1 до 8 — координаты 8 ферзей.
 # Если ферзи не бьют друг друга, выведите слово NO, иначе выведите YES.
+
+def check_queen(q1, q2):
+    return q1[0] == q2[0] or q1[1] == q2[1] or abs(q1[0] - q2[0]) == abs(q1[1] - q2[1])
+
+def check_queens(*queens):
+    for i, q1 in enumerate(queens):
+        for q2 in queens[i+1:]:
+            if check_queen(q1, q2):
+                return True
+    return False
+
+if check_queens((1, 1), (2, 3), (3, 1), (5, 7), (4, 5), (6, 5), (1, 3), (1, 9)):
+    print('NO')
+else:
+    print('YES')
+
+if check_queens((1, 3), (2, 7), (3, 2), (4, 8), (5, 5), (6, 1), (7, 4), (8, 6)):
+    print('NO')
+else:
+    print('YES')
