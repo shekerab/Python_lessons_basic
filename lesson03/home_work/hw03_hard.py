@@ -28,8 +28,8 @@ def calc_fractions(str_):
 calc_fractions('5/6 + 4/7')
 calc_fractions('1/6 + 1/3')
 calc_fractions('-2/3 - -2')
-calc_fractions('-1 1/6 + 2/3')
-
+calc_fractions('-1 1/6 - -2/3')
+calc_fractions('-1 1/6 + 3 2/12')
 
 # Задание-2:
 # Дана ведомость расчета заработной платы (файл "data/workers").
