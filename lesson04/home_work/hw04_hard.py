@@ -46,14 +46,17 @@ number = """
 71636269561882670428252483600823257530420752963450"""
 
 
-list_number = list(map(lambda x: int(x), re.findall('[0-9]',number)))
-prods = []
+list_number = list(map(lambda x: int(x), re.findall('[0-9]',number)))   # чистим данные и преобразуем к числу
+max_prod = 0
+index_max_prod = 0
 for i in range(len(list_number)-5):
-    prods.append(reduce(lambda x, y: x * y, list_number[i:i+5]))
-max_prod = max(prods)
-print(f'Максимальное произведение: {max_prod}')
-print(f'Сдвиг {prods.index(max_prod)}\n')
+    prod = reduce(lambda x, y: x * y, list_number[i:i+5])
+    if prod > max_prod:
+        max_prod = prod
+        index_max_prod = i
 
+print(f'Максимальное произведение: {max_prod}')
+print(f'Сдвиг {index_max_prod}\n')
 
 
 # Задание-3 (Ферзи):
@@ -68,18 +71,13 @@ def check_queen(q1, q2):
     return q1[0] == q2[0] or q1[1] == q2[1] or abs(q1[0] - q2[0]) == abs(q1[1] - q2[1])
 
 def check_queens(*queens):
+# return True если хоть один ферзь бьет другого
     for i, q1 in enumerate(queens):
         for q2 in queens[i+1:]:
             if check_queen(q1, q2):
                 return True
     return False
 
-if check_queens((1, 1), (2, 3), (3, 1), (5, 7), (4, 5), (6, 5), (1, 3), (1, 9)):
-    print('NO')
-else:
-    print('YES')
 
-if check_queens((1, 3), (2, 7), (3, 2), (4, 8), (5, 5), (6, 1), (7, 4), (8, 6)):
-    print('NO')
-else:
-    print('YES')
+print('YES' if check_queens((1, 1), (2, 3), (3, 1), (5, 7), (4, 5), (6, 5), (1, 3), (1, 9)) else 'NO')
+print('YES' if check_queens((1, 3), (2, 7), (3, 2), (4, 8), (5, 5), (6, 1), (7, 4), (8, 6)) else 'NO')
