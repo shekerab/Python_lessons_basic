@@ -39,11 +39,9 @@ print('Отсортированный список:', sort_to_max([2, 10, -12, 2
 
 def my_filter(function, iterable):
 # На вход принимается любой итерируемый объект
-    result = []
     for el in iterable:
         if function(el):
-            result.append(el)
-    return iter(result)
+            yield el
 
 
 my_list = [1, 2, 3, 4, 5, 6, 7]
