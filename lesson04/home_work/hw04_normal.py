@@ -1,11 +1,12 @@
+import re
+import random
+
+
 # Задание-1:
 # Вывести символы в нижнем регистре, которые находятся вокруг
 # 1 или более символов в верхнем регистре.
 # Т.е. из строки "mtMmEZUOmcq" нужно получить ['mt', 'm', 'mcq']
 # Решить задачу двумя способами: с помощью re и без.
-import re
-import random
-
 
 line = 'mtMmEZUOmcqWiryMQhhTxqKdSTKCYEJlEZCsGAMkgAYEOmHBSQsSUHKvSfbmxULaysmNO'\
        'GIPHpEMujalpPLNzRWXfwHQqwksrFeipEUlTLeclMwAoktKlfUBJHPsnawvjPhfgewVzK'\
@@ -22,13 +23,22 @@ line = 'mtMmEZUOmcqWiryMQhhTxqKdSTKCYEJlEZCsGAMkgAYEOmHBSQsSUHKvSfbmxULaysmNO'\
        'qHFjvihuNGEEFsfnMXTfptvIOlhKhyYwxLnqOsBdGvnuyEZIheApQGOXWeXoLWiDQNJFa'\
        'XiUWgsKQrDOeZoNlZNRvHnLgCmysUeKnVJXPFIzvdDyleXylnKBfLCjLHntltignbQoiQ'\
        'zTYwZAiRwycdlHfyHNGmkNqSwXUrxGc'
-result = re.split(r'[A-Z]+',line)
-print(result)
 
-result = re.findall(r'([a-z]+)[A-Z]+([a-z]+)',line)
-print(result)
+# В предположении, что других символов нет, только буквы
+result = re.split(r'[A-Z]+', line)
+print('Задача 1:')
+print(f'Результат рег. выражения: {result}')
 
-
+result = []
+seq = ''
+for s in line:
+    if s.isupper():
+        if seq:
+            result.append(seq)
+            seq = ''
+    else:
+        seq += s
+print(f'Результат цикл          : {result}\n')
 
 
 # Задание-2:
@@ -55,9 +65,29 @@ line_2 = 'mtMmEZUOmcqWiryMQhhTxqKdSTKCYEJlEZCsGAMkgAYEOmHBSQsSUHKvSfbmxULaysm'\
        'JFaXiUWgsKQrDOeZoNlZNRvHnLgCmysUeKnVJXPFIzvdDyleXylnKBfLCjLHntltignbQ'\
        'oiQzTYwZAiRwycdlHfyHNGmkNqSwXUrxGC'
 
-result = re.findall(r'[a-z]{2}([A-Z]+)[A-Z]{2}',line)
+result = re.findall(r'[a-z]{2}([A-Z]+)[A-Z]{2}',line_2)
 print('Задача 2:')
-print(result)
+print(f'Результат рег. выражения: {result}')
+
+result = []
+i = 2
+j = 0
+while i < len(line_2):
+    if line_2[i-1].islower() and line_2[i-2].islower(): # обе предыдущие буквы в нижнем регистре
+        j = i
+        while j < len(line_2): # идем пока заглавные буквы или конец строки
+            if line_2[j].islower():
+                break
+            j += 1
+        if j - i > 2: # если заглавных букв подряд больше 2
+            result.append(line_2[i:j-2]) # добавляем в результат кроме последних двух
+            i = j + 2 # уходим вперед на два символа
+        else:
+            i = j + 1 # уходим вперед только на один символ
+    else:
+        i += 1
+
+print(f'Результат цикл:           {result}\n')
 
 # Задание-3:
 # Напишите скрипт, заполняющий указанный файл (самостоятельно задайте имя файла)
@@ -66,6 +96,7 @@ print(result)
 # Найдите и выведите самую длинную последовательность одинаковых цифр
 # в вышезаполненном файле.
 
+# В один проход
 with open('test.txt','w', encoding='utf-8') as f:
     prev_digit = -1
     current_len = 0
@@ -83,14 +114,16 @@ with open('test.txt','w', encoding='utf-8') as f:
         prev_digit = digit
         f.write(str(digit))
 
-print(f'Максимальная последовательность цифры {max_len_digit}: {max_len}')
+print(f'Вариант 1. Максимальная последовательность цифры {max_len_digit}: {max_len} шт')
 
-
-# res = ''
-# for i in range(2500):
-#     digit = random.randint(0, 9)
-#     res += str(digit)
-# with open('test.txt','w', encoding='utf-8') as f:
-#     f.write(res)
-# print(f'Максимальная последовательность цифры {max_len_digit}: {max_len}')
-#
+# Вариант 2, считываением из файла:
+with open('test.txt','r', encoding='utf-8') as f:
+    s = f.read().strip()
+same_re = re.compile(r"([0-9])\1{1,}")
+max_len = 0
+max_len_string = ''
+for sample in same_re.finditer(s):
+    if len(sample.group()) > max_len:
+        max_len = len(sample.group())
+        max_len_string = sample.group()
+print(f'Вариант 2. Максимальная последовательность {max_len_string}')

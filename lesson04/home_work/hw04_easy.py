@@ -10,7 +10,8 @@ import random
 
 my_list = [1, 4, 16, 0]
 result_list = [x**2 for x in my_list]
-print(f'{my_list} **2 --> {result_list}')
+print('Задача 1:')
+print(f'{my_list} **2 --> {result_list}\n')
 
 
 # Задание-2:
@@ -19,7 +20,8 @@ print(f'{my_list} **2 --> {result_list}')
 list1 = ['яблоко', 'банан', 'киви', 'ананас']
 list2 = ['банан', 'абрикос', 'киви', 'груша']
 result_list = [x for x in list1 if x in list2]
-print(f'{list1} & {list2}  --> {result_list}')
+print('Задача 2:')
+print(f'{list1} & {list2}  --> {result_list}\n')
 
 
 # Задание-3:
@@ -30,6 +32,6 @@ print(f'{list1} & {list2}  --> {result_list}')
 # + Элемент не кратен 4
 
 my_list = [random.randint(-100, 100) for i in range(20)]
-result_list = [x for x in my_list if x % 3 ==0 and x > 0 and x % 4 != 0]
-
-print(f'{my_list} % 3 == 0, > 0, % 4 != 0 --> {result_list}')
+result_list = [x for x in my_list if x % 3 == 0 and x > 0 and x % 4 != 0]
+print('Задача 3:')
+print(f'{my_list} % 3 == 0, > 0, % 4 != 0 --> {result_list}\n')
