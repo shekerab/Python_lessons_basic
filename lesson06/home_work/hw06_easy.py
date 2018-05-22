@@ -102,7 +102,7 @@ trap = Trapezium(Point(-300, 0), Point(-250, 100), Point(-100, 100), Point(-50, 
 trap.show()
 turtle.mainloop()
 print('Трапеция: ')
-print(f'{"Трапеция задана верно" if trap.is_valid() else "Трапеция задана НЕ верно"}')
+print("Трапеция задана верно" if trap.is_valid() else "Задана НЕ трапеция")
 print(f'Трапеция {"равнобочная" if trap.is_equilateral() else "не равнобочная"}')
 if trap.is_valid():
     print(f'Площадь {trap.square()}')
