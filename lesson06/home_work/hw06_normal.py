@@ -122,7 +122,7 @@ print([str(teacher.subject) for teacher in teachers if pupil.class_room in teach
 # 4. Узнать ФИО родителей указанного ученика
 pupil = pupils[2]
 print(f'\nРодители ученика {pupil}:')
-print(f'мама: {pupil.mother.fullname}, папа:{pupil.mother.fullname}')
+print(f'мама: {pupil.mother.fullname}, папа:{pupil.father.fullname}')
 
 # 5. Получить список всех Учителей, преподающих в указанном классе
 class_room = class_rooms[1]
