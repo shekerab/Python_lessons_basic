@@ -43,7 +43,6 @@ class Worker:
         self._calc_income()
 
 
-
 workers = {}
 with open('data/workers', encoding='utf-8') as f:
     f.readline()
