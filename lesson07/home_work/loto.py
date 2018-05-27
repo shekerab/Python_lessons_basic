@@ -1,59 +1,103 @@
-#!/usr/bin/python3
+import random
 
-"""
-== Лото ==
 
-Правила игры в лото.
+class LotoCard:
+    LINES = 3 # константы класса, можно переопределить еще не создав ни одного объекта
+    COLUMNS = 9
+    FILLED_COLUMNS = 5
+    MAX_NUMBER = 90
 
-Игра ведется с помощью специальных карточек, на которых отмечены числа, 
-и фишек (бочонков) с цифрами.
+    def __init__(self, title):
+        self.lines = []
+        self.title = title
+        self._generate_values()
 
-Количество бочонков — 90 штук (с цифрами от 1 до 90).
+    def _generate_values(self):
+        bank = list(range(1, self.MAX_NUMBER+1)) # набор чисел 1..90
+        for i in range(self.LINES):
+            line = random.sample(bank, self.FILLED_COLUMNS) # выборка пяти случайных уникальных элементов
+            line.sort() # сортируем по возрастанию
+            for x in line: # убираем из банка выбранные значения
+                bank.remove(x)
+            for x in range(self.COLUMNS - self.FILLED_COLUMNS): # заполняем недостающие пустыми
+                index = random.randint(0, len(line)) # берем случай индекс от 0 до последний индекс + 1
+                line.insert(index, None) # вставляем пустое значение
+            self.lines.append(line)
 
-Каждая карточка содержит 3 строки по 9 клеток. В каждой строке по 5 случайных цифр, 
-расположенных по возрастанию. Все цифры в карточке уникальны. Пример карточки:
+    def check_number(self, number):
+        for line in self.lines:
+            if number in line:
+                index = line.index(number)
+                if index > -1:
+                    line[index] = ' ++'
+                    return True
+        return False
 
---------------------------
-    9 43 62          74 90
- 2    27    75 78    82
-   41 56 63     76      86 
---------------------------
+    @property
+    def is_finished(self):
+        for line in self.lines:
+            for column in line:
+                if column and type(column) == int:
+                    return False
+        return True # не найдено ни одного числа
 
-В игре 2 игрока: пользователь и компьютер. Каждому в начале выдается 
-случайная карточка. 
+    def print(self):
+        decor_len = (4 * self.COLUMNS - len(self.title)) // 2
+        print('-' * decor_len, self.title, '-' * decor_len)
+        for line in self.lines:
+            line_str = f'|'
+            for column in line:
+                if column:
+                    line_str += f'{column:>3}|'
+                else:
+                    line_str += '   |'
+            print(line_str)
+        print('-' * (4 * self.COLUMNS + 1))
 
-Каждый ход выбирается один случайный бочонок и выводится на экран.
-Также выводятся карточка игрока и карточка компьютера.
 
-Пользователю предлагается зачеркнуть цифру на карточке или продолжить.
-Если игрок выбрал "зачеркнуть":
-	Если цифра есть на карточке - она зачеркивается и игра продолжается.
-	Если цифры на карточке нет - игрок проигрывает и игра завершается.
-Если игрок выбрал "продолжить":
-	Если цифра есть на карточке - игрок проигрывает и игра завершается.
-	Если цифры на карточке нет - игра продолжается.
-	
-Побеждает тот, кто первый закроет все числа на своей карточке.
+# основной цикл
+def get_user_answer(question, variants):
+    while True: # допускаем ошибку пользоватея при вводе
+        answer = input(question).lower()
+        if answer not in variants:
+            print('Введите корректный ответ')
+            continue
+        return answer
 
-Пример одного хода:
+bank_numbers = list(range(1, LotoCard.MAX_NUMBER+1)) # числа от 1 до 90
+player_card = LotoCard('Ваша карточка')
+computer_card = LotoCard('Карточка компьютера')
 
-Новый бочонок: 70 (осталось 76)
------- Ваша карточка -----
- 6  7          49    57 58
-   14 26     -    78    85
-23 33    38    48    71   
---------------------------
--- Карточка компьютера ---
- 7 87     - 14    11      
-      16 49    55 88    77    
-   15 20     -       76  -
---------------------------
-Зачеркнуть цифру? (y/n)
 
-Подсказка: каждый следующий случайный бочонок из мешка удобно получать 
-с помощью функции-генератора.
+while True:
+    player_card.print()
+    computer_card.print()
+    number = random.choice(bank_numbers) # выбираем случайный номер из имеющихся
+    bank_numbers.remove(number)  # выбранный удаляем
 
-Подсказка: для работы с псевдослучайными числами удобно использовать 
-модуль random: http://docs.python.org/3/library/random.html
+    print(f'Выпал номер {number}')
+    computer_card.check_number(number)
+    answer = get_user_answer('Зачеркнуть цифру? (y / n)', ('y', 'n'))
 
-"""
+    if answer == 'y':
+        if not player_card.check_number(number):
+            print(f'Номера {number} на карточке нет, Вы проиграли')
+            break
+    else:
+        if player_card.check_number(number):
+            print(f'Номер {number} на карточке есть, Вы проиграли')
+            break
+
+    if player_card.is_finished:
+        if computer_card.is_finished:
+            print('Игра закончена, ничья')
+            break
+        else:
+            print('Ваша карточка полностью закрыта, Вы выиграли!')
+            break
+    elif computer_card.is_finished:
+        print('Карточка компьютера полностью закрыта, Вы проиграли!')
+        break
+
+    print()# отступ
+
