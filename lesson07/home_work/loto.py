@@ -1,5 +1,7 @@
 import random
 
+AUTOMATIC_MODE = True
+
 
 class LotoCard:
     LINES = 3 # константы класса, можно переопределить еще не создав ни одного объекта
@@ -58,35 +60,45 @@ class LotoCard:
 # основной цикл
 def get_user_answer(question, variants):
     while True: # допускаем ошибку пользоватея при вводе
-        answer = input(question).lower()
+        answer = input(f'{question} ({variants[0]} / {variants[1]}):').lower()
         if answer not in variants:
             print('Введите корректный ответ')
             continue
         return answer
 
-bank_numbers = list(range(1, LotoCard.MAX_NUMBER+1)) # числа от 1 до 90
+def num_generator():
+    bank_numbers = list(range(1, LotoCard.MAX_NUMBER + 1))  # числа от 1 до 90
+    while len(bank_numbers) > 0:
+        number = random.choice(bank_numbers) # выбираем случайный номер из имеющихся
+        bank_numbers.remove(number)  # выбранный удаляем
+        yield  number
+    else:
+        raise Error
+
+
 player_card = LotoCard('Ваша карточка')
 computer_card = LotoCard('Карточка компьютера')
 
 
-while True:
+for number in num_generator():
     player_card.print()
     computer_card.print()
-    number = random.choice(bank_numbers) # выбираем случайный номер из имеющихся
-    bank_numbers.remove(number)  # выбранный удаляем
-
     print(f'Выпал номер {number}')
     computer_card.check_number(number)
-    answer = get_user_answer('Зачеркнуть цифру? (y / n)', ('y', 'n'))
+    player_number_result = player_card.check_number(number)
 
-    if answer == 'y':
-        if not player_card.check_number(number):
-            print(f'Номера {number} на карточке нет, Вы проиграли')
-            break
+    if AUTOMATIC_MODE: # можно отключить издевательское условие на внимательность вводить y, n
+        answer = input('Нажмите любую клавишу для продолжения')
     else:
-        if player_card.check_number(number):
-            print(f'Номер {number} на карточке есть, Вы проиграли')
-            break
+        answer = get_user_answer('Зачеркнуть цифру?', ('y', 'n'))
+        if answer == 'y':
+            if not player_number_result:
+                print(f'Номера {number} на карточке нет, Вы проиграли')
+                break
+        else:
+            if player_number_result:
+                print(f'Номер {number} на карточке есть, Вы проиграли')
+                break
 
     if player_card.is_finished:
         if computer_card.is_finished:
@@ -94,9 +106,13 @@ while True:
             break
         else:
             print('Ваша карточка полностью закрыта, Вы выиграли!')
+            player_card.print()
+            computer_card.print()
             break
     elif computer_card.is_finished:
         print('Карточка компьютера полностью закрыта, Вы проиграли!')
+        computer_card.print()
+        player_card.print()
         break
 
     print()# отступ
