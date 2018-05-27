@@ -1,6 +1,6 @@
 import random
 
-AUTOMATIC_MODE = True
+AUTOMATIC_MODE = True # если True не нужно вводить y, n на каждом шаге
 
 
 class LotoCard:
@@ -66,14 +66,15 @@ def get_user_answer(question, variants):
             continue
         return answer
 
+
 def num_generator():
     bank_numbers = list(range(1, LotoCard.MAX_NUMBER + 1))  # числа от 1 до 90
     while len(bank_numbers) > 0:
         number = random.choice(bank_numbers) # выбираем случайный номер из имеющихся
         bank_numbers.remove(number)  # выбранный удаляем
-        yield  number
+        yield number
     else:
-        raise Error
+        raise StopIteration
 
 
 player_card = LotoCard('Ваша карточка')
